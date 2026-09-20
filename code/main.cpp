@@ -12,6 +12,8 @@ int main()
 	const int width = 800;
 	const int height = 800;
 
+	SetConfigFlags(FLAG_VSYNC_HINT);
+
 	InitWindow(width, height, "Quadtree | Press space to randomize query rect");
 
 	srand(static_cast<unsigned int>(time(nullptr)));
@@ -54,6 +56,9 @@ int main()
 
 				qtree.Insert(p);
 			}
+
+			if (IsKeyDown(KEY_TAB))
+				DrawFPS(0, 0);
 		}
 
 		{ // Handle drawing.
