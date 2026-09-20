@@ -1,5 +1,6 @@
 #include <iostream>
 #include <raylib/include/raylib.h>
+#include <string>
 
 #include "rectangle.hpp"
 #include "point.hpp"
@@ -11,6 +12,7 @@ int main()
 {
 	const int width = 800;
 	const int height = 800;
+	const int insertedPoints = 300;
 
 	SetConfigFlags(FLAG_VSYNC_HINT);
 
@@ -24,8 +26,8 @@ int main()
 	qt2d::Rectangle boundary = { widthHalfLength, heighthHalfLength, widthHalfLength, heighthHalfLength };
 	Quadtree qtree = Quadtree(boundary, 1);
 
-	{ // Randomly insert points in the tree.
-		for (int i = 0; i < 300; i++)
+	{ // Initial randomly inserted points.
+		for (int i = 0; i < insertedPoints; i++)
 		{
 			Point p = { (float)(rand() % width), (float)(rand() % height) };
 			qtree.Insert(p);
@@ -46,10 +48,12 @@ int main()
 			points.clear();
 			qtree.Query(range, points);
 
+			SetWindowTitle((std::string("Quadtree2d | Total points: ") + std::to_string(insertedPoints) + (std::string(" | Checked points: ") + std::to_string(qtree.queryCount))).c_str());
+
 			range.x = mousePosition.x;
 			range.y = mousePosition.y;
 
-			if (IsMouseButtonPressed(0))
+			if (IsMouseButtonPressed(0)) // Point inserter keybind.
 			{
 				Vector2 moisePosition = GetMousePosition();
 				Point p = { (float)(moisePosition.x), (float)(moisePosition.y) };
@@ -57,7 +61,18 @@ int main()
 				qtree.Insert(p);
 			}
 
-			if (IsKeyDown(KEY_TAB))
+			if (IsKeyPressed(KEY_SPACE)) // Point randomizer keybind.
+			{
+				qtree.Clear();
+
+				for (int i = 0; i < insertedPoints; i++)
+				{
+					Point p = { (float)(rand() % width), (float)(rand() % height) };
+					qtree.Insert(p);
+				}
+			}
+
+			if (IsKeyDown(KEY_TAB)) // FPS metrics keybind.
 				DrawFPS(0, 0);
 		}
 
@@ -73,5 +88,6 @@ int main()
 		}
 
 		EndDrawing();
+		qtree.queryCount = 0;
 	}
 }

@@ -10,14 +10,20 @@ namespace qt2d
 	{
 	public:
 		Quadtree(qt2d::Rectangle inBoundary, int inCapacity);
+		~Quadtree();
 
 		bool Insert(Point& point);
 		void Query(Rectangle range, std::vector<Point>& found);
+		void Clear();
 
 		void Draw();
 
 	private:
 		void Subdivide();
+		void Query(Rectangle range, std::vector<Point>& found, int& count);
+
+	public:
+		int queryCount = 0;
 
 	private:
 		std::vector<Point> points;
@@ -29,7 +35,7 @@ namespace qt2d
 
 		Rectangle boundary;
 
-		int capacity = 1;
 		bool divided = false;
+		int capacity = 1;
 	};
 }

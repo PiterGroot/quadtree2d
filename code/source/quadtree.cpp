@@ -12,6 +12,11 @@ Quadtree::Quadtree(qt2d::Rectangle inBoundary, int inCapacity)
 	points.reserve(capacity);
 }
 
+Quadtree::~Quadtree()
+{
+	Clear();
+}
+
 bool Quadtree::Insert(Point& point)
 {
 	if (!boundary.Contains(point))
@@ -45,6 +50,37 @@ bool Quadtree::Insert(Point& point)
 
 void Quadtree::Query(Rectangle range, std::vector<Point>& found)
 {
+	Query(range, found, queryCount);
+}
+
+void Quadtree::Clear()
+{
+	points.clear();
+
+	if (divided)
+	{
+		childNw->Clear();
+		childNe->Clear();
+		childSw->Clear();
+		childSe->Clear();
+
+		delete childNw;
+		delete childNe;
+		delete childSw;
+		delete childSe;
+
+		childNw = nullptr;
+		childNe = nullptr;
+		childSw = nullptr;
+		childSe = nullptr;
+
+		divided = false;
+		queryCount = 0;
+	}
+}
+
+void Quadtree::Query(Rectangle range, std::vector<Point>& found, int& count)
+{
 	if (!boundary.Intersects(range))
 	{
 		return;
@@ -53,6 +89,7 @@ void Quadtree::Query(Rectangle range, std::vector<Point>& found)
 	{
 		for (auto& point : points)
 		{
+			count++;
 			if (range.Contains(point))
 				found.push_back(point);
 		}
@@ -60,10 +97,10 @@ void Quadtree::Query(Rectangle range, std::vector<Point>& found)
 
 	if (divided)
 	{
-		childNw->Query(range, found);
-		childNe->Query(range, found);
-		childSw->Query(range, found);
-		childSe->Query(range, found);
+		childNw->Query(range, found, count);
+		childNe->Query(range, found, count);
+		childSw->Query(range, found, count);
+		childSe->Query(range, found, count);
 	}
 }
 
