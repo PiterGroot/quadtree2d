@@ -17,5 +17,13 @@ namespace qt2d
 				point.y >= y - h &&
 				point.y <= y + h);
 		}
+
+		bool Intersects(Rectangle range) const
+		{
+			return !(range.x - range.w > x + w ||
+				range.x + range.w < x - w ||
+				range.y - range.h > y + h ||
+				range.y + range.h < y - h);
+		}
 	};
 }

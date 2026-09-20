@@ -43,6 +43,30 @@ bool Quadtree::Insert(Point& point)
 	return false;
 }
 
+void Quadtree::Query(Rectangle range, std::vector<Point>& found)
+{
+	if (!boundary.Intersects(range))
+	{
+		return;
+	}
+	else
+	{
+		for (auto& point : points)
+		{
+			if (range.Contains(point))
+				found.push_back(point);
+		}
+	}
+
+	if (divided)
+	{
+		childNw->Query(range, found);
+		childNe->Query(range, found);
+		childSw->Query(range, found);
+		childSe->Query(range, found);
+	}
+}
+
 void Quadtree::Draw()
 {
 	DrawRectangleLines(
@@ -80,10 +104,13 @@ void Quadtree::Subdivide()
 {
 	Rectangle b = boundary;
 
-	Rectangle neRectangle = { b.x + b.w / 2.0f,  b.y - b.h / 2.0f, b.w / 2.0f, b.h / 2.0f };
-	Rectangle nwRectangle = { b.x - b.w / 2.0f,  b.y - b.h / 2.0f, b.w / 2.0f, b.h / 2.0f };
-	Rectangle seRectangle = { b.x + b.w / 2.0f,  b.y + b.h / 2.0f, b.w / 2.0f, b.h / 2.0f };
-	Rectangle swRectangle = { b.x - b.w / 2.0f,  b.y + b.h / 2.0f, b.w / 2.0f, b.h / 2.0f };
+	float halfWidth = b.w / 2.0f;
+	float halfHeight = b.h / 2.0f;
+
+	Rectangle neRectangle = { b.x + halfWidth,  b.y - halfHeight, halfWidth, halfHeight };
+	Rectangle nwRectangle = { b.x - halfWidth,  b.y - halfHeight, halfWidth, halfHeight };
+	Rectangle seRectangle = { b.x + halfWidth,  b.y + halfHeight, halfWidth, halfHeight };
+	Rectangle swRectangle = { b.x - halfWidth,  b.y + halfHeight, halfWidth, halfHeight };
 
 	childNw = new Quadtree(nwRectangle, capacity);
 	childNe = new Quadtree(neRectangle, capacity);

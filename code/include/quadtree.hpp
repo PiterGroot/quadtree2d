@@ -12,8 +12,9 @@ namespace qt2d
 		Quadtree(qt2d::Rectangle inBoundary, int inCapacity);
 
 		bool Insert(Point& point);
-		void Draw();
+		void Query(Rectangle range, std::vector<Point>& found);
 
+		void Draw();
 		void Log() const;
 
 	private:
