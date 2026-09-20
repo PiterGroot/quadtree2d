@@ -14,7 +14,7 @@ int main()
 
 	SetConfigFlags(FLAG_VSYNC_HINT);
 
-	InitWindow(width, height, "Quadtree | Press space to randomize query rect");
+	InitWindow(width, height, "Quadtree2d");
 
 	srand(static_cast<unsigned int>(time(nullptr)));
 
