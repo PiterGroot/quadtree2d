@@ -14,7 +14,6 @@ int main()
 
 	InitWindow(width, height, "Quadtree | Press space to randomize query rect");
 
-	SetTargetFPS(60);
 	srand(static_cast<unsigned int>(time(nullptr)));
 
 	const float widthHalfLength = (float)width / 2.0f;
@@ -33,9 +32,6 @@ int main()
 
 	std::vector<Point> points;
 	qt2d::Rectangle range = { (float)(rand() % width), (float)(rand() % height), 100, 100 };
-	{ // Initial point query.
-		qtree.Query(range, points);
-	}
 
 	while (!WindowShouldClose())
 	{
@@ -43,17 +39,13 @@ int main()
 		ClearBackground(BLACK);
 
 		{ // Handle input.
-			if (IsKeyDown(KEY_SPACE))
-			{
-				range.x = (float)(rand() % width);
-				range.y = (float)(rand() % height);
+			Vector2 mousePosition = GetMousePosition();
 
-				range.w = (float)(rand() % 100) + 15.0f;
-				range.h = (float)(rand() % 100) + 15.0f;
+			points.clear();
+			qtree.Query(range, points);
 
-				points.clear();
-				qtree.Query(range, points);
-			}
+			range.x = mousePosition.x;
+			range.y = mousePosition.y;
 
 			if (IsMouseButtonPressed(0))
 			{
@@ -71,7 +63,7 @@ int main()
 
 			for (auto& point : points)
 			{
-				DrawCircle((int)point.x, (int)point.y, 2.0f, GREEN);
+				DrawCircle((int)point.x, (int)point.y, 3.0f, GREEN);
 			}
 		}
 
