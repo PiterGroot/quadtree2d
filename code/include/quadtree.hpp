@@ -15,7 +15,6 @@ namespace qt2d
 		void Query(Rectangle range, std::vector<Point>& found);
 
 		void Draw();
-		void Log() const;
 
 	private:
 		void Subdivide();
@@ -32,6 +31,5 @@ namespace qt2d
 
 		int capacity = 1;
 		bool divided = false;
-
 	};
 }

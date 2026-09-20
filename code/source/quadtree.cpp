@@ -91,15 +91,6 @@ void Quadtree::Draw()
 	}
 }
 
-
-void Quadtree::Log() const
-{
-	printf("Boundary h: %f\n", boundary.h);
-	printf("Boundary w: %f\n", boundary.w);
-	printf("Boundary x: %f\n", boundary.x);
-	printf("Boundary y: %f\n", boundary.y);
-}
-
 void Quadtree::Subdivide()
 {
 	Rectangle b = boundary;
