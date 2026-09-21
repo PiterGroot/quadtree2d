@@ -15,7 +15,6 @@ namespace qt2d
 		bool Insert(Point& point);
 		void Query(Rectangle range, std::vector<Point>& found);
 		void Clear();
-
 		void Draw();
 
 	private:

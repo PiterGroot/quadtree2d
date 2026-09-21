@@ -37,6 +37,8 @@ int main()
 	std::vector<Point> points;
 	qt2d::Rectangle range = { (float)(rand() % width), (float)(rand() % height), 100, 100 };
 
+	int insertCounter = 0;
+
 	while (!WindowShouldClose())
 	{
 		BeginDrawing();
@@ -48,13 +50,15 @@ int main()
 			points.clear();
 			qtree.Query(range, points);
 
-			SetWindowTitle((std::string("Quadtree2d | Total points: ") + std::to_string(insertedPoints) + (std::string(" | Checked points: ") + std::to_string(qtree.queryCount))).c_str());
+			SetWindowTitle((std::string("Quadtree2d | Total points: ") + std::to_string(insertedPoints + insertCounter) + (std::string(" | Checked points: ") + std::to_string(qtree.queryCount))).c_str());
 
 			range.x = mousePosition.x;
 			range.y = mousePosition.y;
 
 			if (IsMouseButtonPressed(0)) // Point inserter keybind.
 			{
+				insertCounter++;
+
 				Vector2 moisePosition = GetMousePosition();
 				Point p = { (float)(moisePosition.x), (float)(moisePosition.y) };
 
@@ -64,6 +68,7 @@ int main()
 			if (IsKeyPressed(KEY_SPACE)) // Point randomizer keybind.
 			{
 				qtree.Clear();
+				insertCounter = 0;
 
 				for (int i = 0; i < insertedPoints; i++)
 				{
